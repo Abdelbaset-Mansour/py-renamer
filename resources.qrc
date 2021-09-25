@@ -1,0 +1,10 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>gui/icons/rename.svg</file>
+    <file>gui/icons/add.svg</file>
+    <file>gui/icons/check_black.svg</file>
+    <file>gui/icons/delete.svg</file>
+    <file>gui/icons/delete_forever.svg</file>
+    <file>gui/icons/restore.svg</file>
+  </qresource>
+</RCC>

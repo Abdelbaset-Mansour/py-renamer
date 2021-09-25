@@ -14,10 +14,9 @@ from gui.windows.ui_main_window import Ui_MainWindow
 # GLOBALES
 files_names = []
 
-new_file_names = files_names
 
 # MAIN WINDOW
-# -------------------------------------------------------- #
+# ================================================================== #
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -29,14 +28,32 @@ class MainWindow(QMainWindow):
         # UI Changes
         self.ui_changes()
 
-        # Menu Actions
-        # -------------------------------------------------------- #
-        self.ui.action_Select_Files.triggered.connect(self.get_files)
+        # LEFT MENU
+        # ================================================================== #
+        self.ui.toggle_btn.clicked.connect(self.toggle_menu)
+        self.ui.home_btn.clicked.connect(self.show_home_page)
+        self.ui.options_btn.clicked.connect(self.show_options_page)
+        # ::TODO
+        # self.ui.settings_btn.clicked.connect(self.show_settings_page)
+        self.ui.about_btn.clicked.connect(self.about_message_box)
+
+        # ================================================================== #
+        #                  LEFT MENU -> ICONS PATH                 #
+        # ================================================================== #
+        self.ui.toggle_btn.icon_path = "menu.svg"
+        self.ui.home_btn.icon_path = "home.svg"
+        self.ui.options_btn.icon_path = "options.svg"
+        # self.ui.settings_btn.icon_path = "settings.svg"
+        self.ui.about_btn.icon_path = "about.svg"
 
         # #######################
         # START RENAME BUTTON   #
         # #######################
         self.ui.start_rename_btn.clicked.connect(self.start_rename)
+
+        # ADD FILES
+        #################
+        self.ui.add_files_btn.clicked.connect(self.get_files)
 
         # METHODS
         self.update_word_entry(self.ui.methods_list.currentIndex())
@@ -64,7 +81,7 @@ class MainWindow(QMainWindow):
         self.ui.restore_names_btn.clicked.connect(self.restore_names)
 
         # Files table
-        # -------------------------------------------------------- #
+        # ================================================================== #
         self.ui.files_table.horizontalHeader().setStretchLastSection(True)
         self.ui.files_table.setColumnWidth(0, 250)
         self.ui.files_table.setColumnWidth(1, 250)
@@ -72,43 +89,44 @@ class MainWindow(QMainWindow):
         # Disable edit in table
         self.ui.files_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
-        # PROGRESS BAR
-        # -------------------------------------------------------- #
-        # self.ui.progressBar.setValue(80)
-
-        # -------------------------------------------------------- #
-        #                       SETTINGS TAB                       #
-        # -------------------------------------------------------- #
+        # ================================================================== #
+        #                       OPTIONS PAGE                                 #
+        # ================================================================== #
         # SAVE LOCATION BTN
         self.ui.save_location_btn.clicked.connect(self.change_save_location)
 
         # SHOW WINDOW
-        # -------------------------------------------------------- #
+        # ================================================================== #
         self.show()
-        # -------------------------------------------------------- #
+        # ================================================================== #
 
     # UI CHANGES
     def ui_changes(self):
         # APP TITLE
         self.setWindowTitle("Py Renamer")
 
+        # SET ICON
+        self.setWindowIcon(QIcon("icon.svg"))
+
         # RESIZE
-        self.resize(700, 500)
+        self.resize(1000, 600)
+        self.setMinimumHeight(550)
 
         # LOAD THEME
         # open qss file
         File = QFile("gui/themes/light.qss")
+        # File = QFile("gui/themes/dark.qss")
+        # File = QFile("gui/themes/style.qss")
         if not File.open(QFile.ReadOnly | QFile.Text):
-            raise "Error"
+            raise "THEME FILE ERROR"
 
         qss = QTextStream(File)
         self.setStyleSheet(qss.readAll())
 
-        # TAB WIDGET
-        # -------------------------------------------------------- #
-        ## Home TAB
-        # Set home tab to default tab
-        self.ui.main_tab_widget.setCurrentWidget(self.ui.home_tab)
+        # DEAFUALT PAGE
+        # ================================================================== #
+        self.ui.app_pages.setCurrentWidget(self.ui.home_page)
+        self.ui.home_btn.set_active(True)
 
     # UPDATE METHODS LIST
     def update_word_entry(self, index):
@@ -122,9 +140,61 @@ class MainWindow(QMainWindow):
             self.ui.word_entry.setReadOnly(True)
             self.ui.letter_num.setDisabled(False)
 
-    # -------------------------------------------------------- #
+    # ================================================================== #
+    #                         LEFT MENU                                  #
+    # ================================================================== #
+    # RESET SELECTION
+    def reset_selection(self):
+        for btn in self.ui.left_menu.findChildren(QPushButton):
+            btn.set_active(False)
+
+    # TOGGLE MENU
+    def toggle_menu(self):
+        # Get menu width
+        menu_width = self.ui.left_menu.width()
+        width = 50
+        if menu_width == 50:
+            width = 200
+
+        # Animation
+        self.animation = QPropertyAnimation(self.ui.left_menu, b"minimumWidth")
+        self.animation.setStartValue(menu_width)
+        self.animation.setEndValue(width)
+        self.animation.setDuration(200)
+        self.animation.start()
+
+    # SHOW SETTINGS PAGE
+    def show_settings_page(self):
+        # Get menu width
+        settings_page_width = self.ui.settings_page.width()
+        width = 0
+        if settings_page_width == 0:
+            width = 220
+
+        # Animation
+        self.animation = QPropertyAnimation(self.ui.settings_page, b"minimumWidth")
+        self.animation.setStartValue(settings_page_width)
+        self.animation.setEndValue(width)
+        self.animation.setDuration(200)
+        self.animation.start()
+
+    # SHOW HOME PAGE
+    # ================================================================== #
+    def show_home_page(self):
+        self.reset_selection()
+        self.ui.app_pages.setCurrentWidget(self.ui.home_page)
+        self.ui.home_btn.set_active(True)
+
+    # SHOW OPTIONS PAGE
+    # ================================================================== #
+    def show_options_page(self):
+        self.reset_selection()
+        self.ui.app_pages.setCurrentWidget(self.ui.options_page)
+        self.ui.options_btn.set_active(True)
+
+    # ================================================================== #
     # Handle Menu Actions
-    # -------------------------------------------------------- #
+    # ================================================================== #
     def get_files(self):
         global files_names
         files = QFileDialog.getOpenFileNames(parent=self)
@@ -144,7 +214,7 @@ class MainWindow(QMainWindow):
             self.load_data()
 
     # LOAD DATA INTO TABLE
-    # -------------------------------------------------------- #
+    # ================================================================== #
     def load_data(self):
 
         # CHECK IF FILES NAMES LIST IS EMPTY
@@ -169,7 +239,7 @@ class MainWindow(QMainWindow):
             self.ui.files_table.setRowCount(0)
 
     # ADD WORD TO NAME
-    # -------------------------------------------------------- #
+    # ================================================================== #
     def add_word_to_name(self):
         # GET WORD FROM WORD ENTRY FEILD
         word = self.ui.word_entry.text()
@@ -181,7 +251,7 @@ class MainWindow(QMainWindow):
         self.load_data()
 
     # REMOVE LETTER FROM NAME
-    # -------------------------------------------------------- #
+    # ================================================================== #
     def remove_letter_from_name(self):
         end_pos = self.ui.letter_num.text()
 
@@ -192,20 +262,20 @@ class MainWindow(QMainWindow):
         self.load_data()
 
     # EMPTY TABLE DATA
-    # -------------------------------------------------------- #
+    # ================================================================== #
     def empty_table_data(self):
         global files_names
         files_names.clear()
         self.load_data()
 
     # APPLY CHANGES TO NAME
-    # -------------------------------------------------------- #
+    # ================================================================== #
     def apply_name_changes(self):
         for item in files_names:
             item["edited_name"] = item["new_name"]
 
     # ADD NUMBER TO ALL FILES NAMES
-    # -------------------------------------------------------- #
+    # ================================================================== #
     def add_number(self):
         for count, item in enumerate(files_names, start=1):
             item["new_name"] = f"{f'{ count }'.zfill(3)}{item['edited_name']}"
@@ -214,7 +284,7 @@ class MainWindow(QMainWindow):
         self.load_data()
 
     # REMOVE FILES NAMES
-    # -------------------------------------------------------- #
+    # ================================================================== #
     def remove_file_name(self):
         for item in files_names:
             item["new_name"] = Path(item["edited_name"]).suffix
@@ -229,32 +299,42 @@ class MainWindow(QMainWindow):
         self.load_data()
 
     # START RENAME BUTTON
-    # -------------------------------------------------------- #
+    # ================================================================== #
     def start_rename(self):
 
         self.thread = RenamerWorker(
             files_names, self.ui.rename_radio_btn, self.ui.copy_radio_btn
         )
-        self.thread.start()
-        self.thread.progress_value.connect(
-            lambda val: self.ui.progressBar.setValue(val)
-        )
-        # Current File
-        self.thread.current_file.connect(
-            lambda current: self.ui.current_file_label.setText(current)
-        )
+        if files_names:
+            self.thread.start()
+            self.thread.progress_value.connect(
+                lambda val: self.ui.progressBar.setValue(val)
+            )
+            # Current File
+            self.thread.current_file.connect(
+                lambda current: self.ui.current_file_label.setText(current)
+            )
+            # TOTAL
+            self.thread.total_label.connect(
+                lambda value: self.ui.total_label.setText(value)
+            )
 
-        # DISABLE "START RENAME BTN"
-        self.ui.start_rename_btn.setDisabled(True)
+            # DISABLE "START RENAME BTN"
+            self.ui.start_rename_btn.setDisabled(True)
 
-        # RESET PROGRESS BAR
-        self.thread.finished.connect(self.finish_rename)
+            # RESET PROGRESS BAR
+            self.thread.finished.connect(self.finish_rename)
+
+            # ERROR:: NO FILE TO RENAME
+        else:
+            QMessageBox.warning(self, "Warning", "No File to Rename.", QMessageBox.Ok)
 
     # FINISH RENAME
     def finish_rename(self):
         QMessageBox.information(self, "Done", "All Files was renamed.", QMessageBox.Ok)
         self.ui.progressBar.setValue(0)
         self.ui.current_file_label.clear()
+        self.ui.total_label.clear()
 
         # ENABLE "START RENAME BTN"
         self.ui.start_rename_btn.setDisabled(False)
@@ -262,9 +342,9 @@ class MainWindow(QMainWindow):
         files_names.clear()
         self.load_data()
 
-    # -------------------------------------------------------- #
-    #                       SETTINGS TAB                       #
-    # -------------------------------------------------------- #
+    # ================================================================== #
+    #                       SETTINGS TAB
+    # ================================================================== #
     # CHNAGE SAVE LOCATION
     def change_save_location(self):
         location = QFileDialog.getExistingDirectory(self)
@@ -279,12 +359,33 @@ class MainWindow(QMainWindow):
             # LOAD DATA
             self.load_data()
 
+    # ------------------------------------------------------------------ #
+    #                          ABOUT MESSAGE BOX                         #
+    # ------------------------------------------------------------------ #
+    def about_message_box(self):
+        QMessageBox.about(
+            self,
+            "About - PyRenamer",
+            f"""
+            <html>
+            <body>
+                <h3>PyRenamer</h3>
+                <p>Simple Multipule File Renamer Application. </p>
+                <p style=" font-size:8pt; font-weight: bold; font-style:italic;">
+                    By, Abdelbaset Mansour
+                </p>
+            </body>
+            </html>
+            """,
+        )
+
 
 # Renamer Worker Thread
-# -------------------------------------------------------- #
+# ================================================================== #
 class RenamerWorker(QThread):
     progress_value = Signal(int)
     current_file = Signal(str)
+    total_label = Signal(str)
 
     def __init__(self, files_names, rename_radio_btn, copy_radio_btn):
         super().__init__()
@@ -298,11 +399,14 @@ class RenamerWorker(QThread):
                 # Current file
                 self.current_file.emit(f"Current File: {file['edited_name']}")
 
-                # RENAME FILE :: TODO
+                # TOTAL
+                self.total_label.emit(f"{count}/{len(self.files_names)}")
+
+                # RENAME FILE
                 src = Path(file["path"]).joinpath(file["name"])
                 dest = (
                     Path(file["new_path"]).joinpath(file["edited_name"])
-                    if file["new_path"]
+                    if self.copy_radio_btn.isChecked()
                     else Path(file["path"]).joinpath(file["edited_name"])
                 )
 
@@ -317,11 +421,11 @@ class RenamerWorker(QThread):
                 self.progress_value.emit(precent)
 
         else:
-            print(f"LIST IS EMPTY: {files_names}")
+            print(f"No File to Rename: {files_names}")
 
 
 # EXCUTE APP
-# -------------------------------------------------------- #
+# ================================================================== #
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
