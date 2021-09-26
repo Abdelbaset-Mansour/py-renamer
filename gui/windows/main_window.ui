@@ -350,7 +350,7 @@
             </widget>
            </item>
            <item>
-            <widget class="FilesTableWidget" name="files_table">
+            <widget class="QTableWidget" name="files_table">
              <attribute name="verticalHeaderStretchLastSection">
               <bool>false</bool>
              </attribute>
@@ -633,11 +633,6 @@
    <class>MenuBtn</class>
    <extends>QPushButton</extends>
    <header>gui.widgets.menu_btn.h</header>
-  </customwidget>
-  <customwidget>
-   <class>FilesTableWidget</class>
-   <extends>QTableWidget</extends>
-   <header>gui.widgets.files_table_widget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

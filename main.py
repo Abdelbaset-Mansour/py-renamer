@@ -13,6 +13,8 @@ from gui.windows.ui_main_window import Ui_MainWindow
 # GLOBALES
 files_names = []
 
+app_version = "v1.0.0"
+
 
 # MAIN WINDOW
 # ================================================================== #
@@ -102,7 +104,10 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Py Renamer")
 
         # SET ICON
-        self.setWindowIcon(QIcon("icon.svg"))
+        self.setWindowIcon(QIcon("icon.ico"))
+
+        # SET APP VERSION
+        self.ui.app_version_label.setText(app_version)
 
         # RESIZE
         self.resize(1000, 600)
@@ -110,9 +115,8 @@ class MainWindow(QMainWindow):
 
         # LOAD THEME
         # open qss file
-        File = QFile("gui/themes/light.qss")
-        # File = QFile("gui/themes/dark.qss")
-        # File = QFile("gui/themes/style.qss")
+        File = QFile("themes/light.qss")
+        # File = QFile("themes/dark.qss")
         if not File.open(QFile.ReadOnly | QFile.Text):
             raise "THEME FILE ERROR"
 
@@ -351,7 +355,7 @@ class MainWindow(QMainWindow):
             <html>
             <body>
                 <h3>PyRenamer</h3>
-                <p>Simple Multipule File Renamer Application. </p>
+                <p>Simple Multiple File Renamer Application. </p>
                 <p style=" font-size:8pt; font-weight: bold; font-style:italic;">
                     By, Abdelbaset Mansour
                 </p>

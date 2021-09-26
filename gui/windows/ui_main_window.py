@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main_windowuNIudX.ui'
+## Form generated from reading UI file 'main_windowBMIXoB.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.1.2
 ##
@@ -13,7 +13,6 @@ from PySide6.QtGui import *  # type: ignore
 from PySide6.QtWidgets import *  # type: ignore
 
 from gui.widgets.menu_btn import MenuBtn
-from gui.widgets.files_table_widget import FilesTableWidget
 
 import resources_rc
 
@@ -192,7 +191,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addWidget(self.frame)
 
-        self.files_table = FilesTableWidget(self.home_page)
+        self.files_table = QTableWidget(self.home_page)
         if (self.files_table.columnCount() < 3):
             self.files_table.setColumnCount(3)
         __qtablewidgetitem = QTableWidgetItem()

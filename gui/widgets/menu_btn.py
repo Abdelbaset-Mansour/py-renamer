@@ -74,7 +74,7 @@ class MenuBtn(QPushButton):
 
         # FORMAT "ICONS" PATH
         app_path = os.path.abspath(os.getcwd())
-        folder = "gui/icons"
+        folder = "icons"
         path = os.path.join(app_path, folder)
         icon_path = os.path.normpath(os.path.join(path, self.icon_path))
 
