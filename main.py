@@ -1,10 +1,9 @@
 # IMPORT QT CORE
-import os
-from re import S
 from qt_core import *
 
 # IMPORT MODULES
 import sys
+import os
 from pathlib import Path
 import shutil
 
@@ -33,8 +32,6 @@ class MainWindow(QMainWindow):
         self.ui.toggle_btn.clicked.connect(self.toggle_menu)
         self.ui.home_btn.clicked.connect(self.show_home_page)
         self.ui.options_btn.clicked.connect(self.show_options_page)
-        # ::TODO
-        # self.ui.settings_btn.clicked.connect(self.show_settings_page)
         self.ui.about_btn.clicked.connect(self.about_message_box)
 
         # ================================================================== #
@@ -43,7 +40,6 @@ class MainWindow(QMainWindow):
         self.ui.toggle_btn.icon_path = "menu.svg"
         self.ui.home_btn.icon_path = "home.svg"
         self.ui.options_btn.icon_path = "options.svg"
-        # self.ui.settings_btn.icon_path = "settings.svg"
         self.ui.about_btn.icon_path = "about.svg"
 
         # #######################
@@ -163,21 +159,6 @@ class MainWindow(QMainWindow):
         self.animation.setDuration(200)
         self.animation.start()
 
-    # SHOW SETTINGS PAGE
-    def show_settings_page(self):
-        # Get menu width
-        settings_page_width = self.ui.settings_page.width()
-        width = 0
-        if settings_page_width == 0:
-            width = 220
-
-        # Animation
-        self.animation = QPropertyAnimation(self.ui.settings_page, b"minimumWidth")
-        self.animation.setStartValue(settings_page_width)
-        self.animation.setEndValue(width)
-        self.animation.setDuration(200)
-        self.animation.start()
-
     # SHOW HOME PAGE
     # ================================================================== #
     def show_home_page(self):
@@ -193,7 +174,7 @@ class MainWindow(QMainWindow):
         self.ui.options_btn.set_active(True)
 
     # ================================================================== #
-    # Handle Menu Actions
+    # GET FILES FROM FILE DIALOG
     # ================================================================== #
     def get_files(self):
         global files_names
@@ -394,34 +375,31 @@ class RenamerWorker(QThread):
         self.copy_radio_btn = copy_radio_btn
 
     def run(self):
-        if self.files_names:
-            for count, file in enumerate(self.files_names, start=1):
-                # Current file
-                self.current_file.emit(f"Current File: {file['edited_name']}")
 
-                # TOTAL
-                self.total_label.emit(f"{count}/{len(self.files_names)}")
+        for count, file in enumerate(self.files_names, start=1):
+            # Current file
+            self.current_file.emit(f"Current File: {file['edited_name']}")
 
-                # RENAME FILE
-                src = Path(file["path"]).joinpath(file["name"])
-                dest = (
-                    Path(file["new_path"]).joinpath(file["edited_name"])
-                    if self.copy_radio_btn.isChecked()
-                    else Path(file["path"]).joinpath(file["edited_name"])
-                )
+            # TOTAL
+            self.total_label.emit(f"{count}/{len(self.files_names)}")
 
-                # CHECK FOR COPY OR RENAME
-                if self.rename_radio_btn.isChecked():
-                    os.rename(src, dest)
+            # RENAME FILE
+            src = Path(file["path"]).joinpath(file["name"])
+            dest = (
+                Path(file["new_path"]).joinpath(file["edited_name"])
+                if self.copy_radio_btn.isChecked()
+                else Path(file["path"]).joinpath(file["edited_name"])
+            )
 
-                elif self.copy_radio_btn.isChecked() == True and file["new_path"] != "":
-                    shutil.copy2(src, dest)
+            # CHECK FOR COPY OR RENAME
+            if self.rename_radio_btn.isChecked():
+                os.rename(src, dest)
 
-                precent = (count / len(self.files_names)) * 100
-                self.progress_value.emit(precent)
+            elif self.copy_radio_btn.isChecked() == True and file["new_path"] != "":
+                shutil.copy2(src, dest)
 
-        else:
-            print(f"No File to Rename: {files_names}")
+            precent = (count / len(self.files_names)) * 100
+            self.progress_value.emit(precent)
 
 
 # EXCUTE APP

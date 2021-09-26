@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main_windowDUyIAs.ui'
+## Form generated from reading UI file 'main_windowuNIudX.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.1.2
 ##
@@ -316,27 +316,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.content, 0, 1, 1, 1)
 
-        self.settings_page = QFrame(self.centralwidget)
-        self.settings_page.setObjectName(u"settings_page")
-        self.settings_page.setMinimumSize(QSize(0, 0))
-        self.settings_page.setMaximumSize(QSize(0, 16777215))
-        self.settings_page.setFrameShape(QFrame.StyledPanel)
-        self.settings_page.setFrameShadow(QFrame.Raised)
-        self.verticalLayout_7 = QVBoxLayout(self.settings_page)
-        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.label_3 = QLabel(self.settings_page)
-        self.label_3.setObjectName(u"label_3")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
-        self.label_3.setSizePolicy(sizePolicy3)
-
-        self.verticalLayout_7.addWidget(self.label_3)
-
-
-        self.gridLayout.addWidget(self.settings_page, 0, 2, 1, 1)
-
         self.bottom_bar = QFrame(self.centralwidget)
         self.bottom_bar.setObjectName(u"bottom_bar")
         self.bottom_bar.setMinimumSize(QSize(0, 25))
@@ -421,7 +400,6 @@ class Ui_MainWindow(object):
         self.copy_radio_btn.setText(QCoreApplication.translate("MainWindow", u"Copy Files To New Folder", None))
         self.save_location_entry.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Past path here or choose from button", None))
         self.save_location_btn.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Settings Page", None))
         self.author_label.setText(QCoreApplication.translate("MainWindow", u"By, Abdelbaset Mansour", None))
         self.app_version_label.setText(QCoreApplication.translate("MainWindow", u"v0.2.0", None))
     # retranslateUi
