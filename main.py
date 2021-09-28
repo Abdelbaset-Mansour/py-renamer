@@ -109,6 +109,17 @@ class MainWindow(QMainWindow):
         # SET APP VERSION
         self.ui.app_version_label.setText(app_version)
 
+        # SET APP AUTHOR
+        self.ui.author_label.setText(
+            """ 
+            <html>
+                <p">
+                    Made With <img style='vertical-align: middle; ' src="icons/heart.svg" /> By, Abdelbaset Mansour
+                </p>
+            </html>
+         """
+        )
+
         # RESIZE
         self.resize(1000, 600)
         self.setMinimumHeight(550)
@@ -357,9 +368,8 @@ class MainWindow(QMainWindow):
                 <h3>PyRenamer</h3>
                 <p>Simple Multiple File Renamer Application. </p>
                 <p style=" font-size:8pt; font-weight: bold; font-style:italic;">
-                    By, Abdelbaset Mansour
+                    Made With <img style='vertical-align: middle; height:15px; width:15px;' src="icons/heart.svg" /> By, Abdelbaset Mansour
                 </p>
-            </body>
             </html>
             """,
         )

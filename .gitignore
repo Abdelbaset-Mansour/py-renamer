@@ -7,5 +7,6 @@ venv/
 .qt_for_python/
 
 build/
+dist/
 
 setup.py
